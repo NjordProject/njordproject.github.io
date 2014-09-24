@@ -1,0 +1,38 @@
+.side {
+	background-color: rgb(61, 79, 93);
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	color: #ffffff;
+}
+
+.header {
+	margin: 80% 2em 0;
+	text-align: right;
+}
+
+.header h1 {
+	margin: 0;
+}
+
+.header h2 {
+	color: rgb(176, 202, 219);
+	font-weight: 300;
+	margin: 0;
+}
+
+.article {
+	margin-left: 25%;
+	padding: 2em 3em 0;
+	color: #111111;
+}
+
+.article h2 {
+	font-size: 2em;
+	margin-bottom: 0;
+}
+
+.article p {
+	line-height: 1.8em;
+	margin-bottom: 0;
+}
