@@ -6,6 +6,21 @@
 	color: #ffffff;
 }
 
+.lang-list {
+	list-style: none;
+	padding-left: 0;
+	margin-left: 17px;
+}
+
+.lang-list li {
+	display: inline-block;
+}
+
+.lang-list li a {
+	background-color: rgb(61, 79, 93);
+	font-size: 0.8em;
+}
+
 .header {
 	margin: 80% 2em 0;
 	text-align: right;
