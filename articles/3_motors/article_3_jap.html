@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>モーター</h1>
+				<p>前回は私たちのドローンを作る為に選んだコンポーネントの紹介をしました。前回の記事以来、いつかのコンポーネントの落首しました。私たちがコンポーネントを組み合わせる前に、各員のコンポーネントのライブラリを書くのが良いを思いました。今度の記事の目標は、モーターの管制する為にライブラリを書いた私たちの紹介です。</p>
+				<h2>ライブラリ</h2>
+				<p>下の写真が見せるのように、このモーターはとても細かいです。これから、強いトルクを生めません。けれど、もし私たちの計算が正しいと、あのトルクが足ります。</p>
+				<img src="../../img/moteur_bccm01b.jpg" alt="Moteur_BCC01B" height="300px" width="600px">
+				<p>是非、このコンポーネントの使い方が簡単です。モーターが回る為に、それをただ供給しなければなりません。だから、このライブラリも易しいです。一台のモーターは一つのピンと一つの値で組み上がります。始めに、クラスの宣言を見て下さい：</p>
+				<p><pre><code class="c++">
+#ifndef Bccm01b_h
+#define Bccm01b_h
+
+#include "Arduino.h"
+#include &ltstdint.h&gt
+
+//Class representing one motor
+class Bccm01b {
+	public:
+		Bccm01b ( uint8_t pin ); //Constructor
+		int controlSpeed ( int value ); //Setter speed
+		int reportSpeed (); //Getter speed
+		const uint8_t getPin (); //Getter pin
+	private:
+		const uint8_t _pin;
+		int _value; //Speed
+};
+
+#endif
+					</code></pre></p>
+				<p>一台のモーターが<i>Bccm01b</i>のクラスのインスタンスで代表しています（Bccm01bはモーターのモデルです）。このクラスの構図は平明です。一台のモーターが一本のピンと一つのバリューで代表しています。このバリューはモーターの速力です。</p>
+				<p>コンストラクタとゲターは複雑ではありませんから、速力のセターにだけ集中します。モーターはPWMのピンにつなぎますし、PWMのピンは０から２５５まで変わりますし、バリューが較差で変わるのはチェックをしなければなりません。もし、較差で変わらなくたら、プログラムがユーザーにエラーのお知らせをします。</p>
+				<p>勿論、私たちの<a href="https://github.com/NjordProject/drone">GitHub</a>でこのライブラリをダウンロード出来ます。</p>
+				<h2>示威運動</h2>
+				<p>この記事を結論づける為に、これがライブラリのテストのヴィデオです。このテストは一台のモーターの速力を御します。始めに、速力は０から２５５まで増えます。これから、０まで落ちます。（このテストはライブラリのレポジトリと同じにいます）。</p>
+				<p><video width="320" height="240" controls>
+  					<source src="../../video/test_moteur_bccm01b.mp4" type="video/mp4">
+					そのブラウザはヴィデオを読めません。
+				</video></p>
+				<p>次の記事は2.4GHzの無線通信のコンポーネントについてです。</p>
+				<p>よろしくお願いします。</p>
+        	</div>
+        </div>
+    </body>
+</html>

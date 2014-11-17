@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Motors</h1>
+				<p>The last we introduced the different components that we have chosen to construct our drone. For this article we have received some pieces. Before assembling everything, we thought it could be more convenient to write the different libraries. The purpose of this article is to present the library that we have written in order to control the motors.</p>
+				<h2>Library</h2>
+				<p>As you can see the photo below, those motors are really tiny. Then, they can't produce a huge torque. However, if we are right it should be sufficient.</p>
+				<img src="../../img/moteur_bccm01b.jpg" alt="Moteur_BCC01B" height="300px" width="600px">
+				<p>Certainly, this component is the easier to take in the hand. You have just to supply the motor to get it active. Therefore, the library that we offer is really simple. First, take a look to the declaration:</p>
+				<p>
+					<pre><code class="c++">
+#ifndef Bccm01b_h
+#define Bccm01b_h
+
+#include "Arduino.h"
+#include &ltstdint.h&gt
+
+//Class representing one motor
+class Bccm01b {
+	public:
+		Bccm01b ( uint8_t pin ); //Constructor
+		int controlSpeed ( int value ); //Setter speed
+		int reportSpeed (); //Getter speed
+		const uint8_t getPin (); //Getter pin
+	private:
+		const uint8_t _pin;
+		int _value; //Speed
+};
+
+#endif
+					</code></pre>
+				</p>
+				<p>One motor is represented by an instance of <i>Bccm01b</i> class (which is the model of our motor).　Composition of this class is pretty simple. One motor is only composed by a pin and a value (directly linked to the speed of rotation).</p>
+				<p>Beyond the constructor and the getters which are not special, we will focus only on the function which allow us to modify the speed. Motors are connected to PWM pins, then values can only vary between 0 and 255. Therefore, we have to check that the value passed as argument is in this range. If it not, then we return an error to the user.</p>
+				<p>Of course you can download this library on our <a href="https://github.com/NjordProject/drone">GitHub</a>.</p>
+				<h2>Demonstration</h2>
+				<p>To sum up this article, this is a video presenting a test of our library. This test is settle to control one motor and increase its speed, until it reaches its maximal value (255). Then, we decrease this value until the motor stop (0). (This test is present in the same repository as the library).</p>
+				<p><video width="320" height="240" controls>
+  					<source src="../../video/test_moteur_bccm01b.mp4" type="video/mp4">
+					Your browser does not support the video tag.
+				</video></p>
+				<p>A forthcoming article will be dedicated to the manipulation of radio transmitter/receiver component.</p>
+        	</div>
+        </div>
+    </body>
+</html>

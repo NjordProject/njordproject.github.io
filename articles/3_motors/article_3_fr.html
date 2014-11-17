@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Moteurs</h1>
+				<p>La dernière fois nous vous avons présenté les différents composants que nous avons choisis pour construire le drone. Depuis nous avons reçu un certain nombre de pièces. Avant de tout assemblé nous avons pensé qu'il serait plus pratique de créer des librairies pour chaque composant. Le but de cet article est de présenter la librairie que nous avons écrit pour la gestion des moteurs.</p>
+				<h2>Librairie</h2>
+				<p>Comme le montre la photo ci-dessous, ces moteurs sont vraiment très petits.　Ainsi ils ne produisent pas un couple énorme, mais d'après nos calculs cela devrait être suffisant pour notre drone.</p>
+				<img src="../../img/moteur_bccm01b.jpg" alt="Moteur_BCC01B" height="300px" width="600px">
+				<p>Ce composant est sans aucun doute le plus simple à prendre en main. Il suffit d'envoyer un courant au moteur pour qu'il soit actif. Par conséquent la bibliothèque que nous proposons est vraiment simple.  Pour commencer, voici la déclaration de la librairie :</p>
+				<p>
+					<pre><code class="c++">
+#ifndef Bccm01b_h
+#define Bccm01b_h
+
+#include "Arduino.h"
+#include &ltstdint.h&gt
+
+//Class representing one motor
+class Bccm01b {
+	public:
+		Bccm01b ( uint8_t pin ); //Constructor
+		int controlSpeed ( int value ); //Setter speed
+		int reportSpeed (); //Getter speed
+		const uint8_t getPin (); //Getter pin
+	private:
+		const uint8_t _pin;
+		int _value; //Speed
+};
+
+#endif
+					</code></pre>
+				</p>
+				<p>On représente donc un moteur par une instance de la classe <i>Bccm01b</i> (qui est le modèle du moteur). La composition de cette classe est assez simple. Un moteur est seulement représenté par une broche et une valeur (liée directement à la vitesse).</p>
+				<p>Au-delà du constructeur et des accesseurs qui ne possèdent rien de particulier, on se concentrera seulement sur la fonction qui permet de modifier la vitesse. Les moteurs étant reliés à des broches PWM, les valeurs ne peuvent varier qu'entre 0 et 255. Ainsi avant de modifier la vitesse il faut vérifier que la valeur envoyée est bien comprise dans cette plage, si elle ne l'est pas on retourne une erreur à l'utilisateur.</p>
+				<p>Vous pouvez bien entendu récupérer cette bibliothèque sur notre <a href="https://github.com/NjordProject/drone">GitHub</a>.</p>
+				<h2>Démonstration</h2>
+				<p>Pour conclure cet article, voici une vidéo du test de notre bibliothèque. Le test se contente de contrôler un moteur et d'augmenter progressivement sa vitesse, jusqu'à ce qu'elle atteigne sa valeur maximum. Puis on réduit petit à petit la vitesse jusqu'à l'arrêt du moteur. (Ce test est présent dans le même répertoire que notre bibliothèque).</p>
+				<p><video width="320" height="240" controls>
+  					<source src="../../video/test_moteur_bccm01b.mp4" type="video/mp4">
+					Votre navigateur internet ne peut pas lire cette vidéo.
+				</video></p>
+				<p>Un prochain article sera dédié à la manipulation des transmetteurs/récepteurs radio.</p>
+        	</div>
+        </div>
+    </body>
+</html>

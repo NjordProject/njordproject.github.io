@@ -63,5 +63,14 @@
 }
 
 .content p {
-	line-height: 1.8em;;
+	line-height: 1.8em;
+}
+
+pre.code {
+	background-color:BLACK;
+	font-family:courier, serif;
+	font-size:10px;
+	font-style:normal;
+	margin:10px;
+	padding:0px
 }

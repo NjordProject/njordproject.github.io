@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Preparations</h1>
+				<p>In the first article we explained the idea of our project. For the last time we have begun with concrete things, beginning by modeling the drone. With this second article we introduce the components we have chosen and the intended circuit.</p>
+				<h2>Cost estimations</h2>
+				<p>We started by investigate on state of the art about drones. You should notice that there are several kinds of flying drones. Some are small, others are bigger. Some robots are swift (quick and agile), or have an optimized flight for shooting while some drones have a hybrid flight, etc... For our application we rather need a hybrid one. We plan to draw the topography of an area, in order to do that we want to use an ultrasonic sensor which will measure the distance between the drone and what there is below. Then, we don't need to fly slowly, but the drone should not be too much quick in order to record as much information as possible. Moreover, due to practical reasons, it could be interesting to create a drone that doesn't need to be reloaded during an analyzes session.</p>
+				<p>Among existing drones, the <b>Crazyflie</b> from <a href="http://www.bitcraze.se/">Bitcraze</a> has interested us thank to its small size, also it's open source and you can easily buy components separately.</p>
+				<img src="../../img/crazyflie.png" alt="Crazyflie" height="300px" width="300px">
+				<p>We decided to draw inspiration from this tiny drone. More specifically, ours has a size similar to the Bitcraze's one and it has the same battery, motor and blades but the remaining components are different. We don't want to use a real Crazyflie because our goal is to design a drone from scratch. Furthermore, this model doesn't really correspond to what we want to obtain. In all cases we should modify it.</p>
+				<p>At the beginning of this scholar year we attended to a seminar about Arduido language. We have discovered a language easy to use when you already know about languages as C. Then, we chose to use the Arduino technologies. Actually, the microcontroller is an Arduino Pro Mini. The main advantage of this component is its small size and its light weight, 18x33mm for 2g. Moreover, it provides an enough number of analogies and <a href="http://Arduino.cc/en/Tutorial/PWM">Pulse With Modulation (PWM)</a> pins. However, we probably need to use a decoder to compensate for the lack of digital ones.</p>
+				<img src="../../img/arduinopromini.jpg" alt="Arduino Pro Mini" height="115px" width="200px">
+				<p>It's important to have a technology to help the drone to stabilize itself. The robot need to know, at all times, its angle of inclination. Then, we need a gyroscope. The huge catalog of Arduino's modules provides <a href="http://playground.arduino.cc/Main/MPU-6050">MPU-6050</a>, a component that offers a gyroscope and an accelerometer.</p>
+				<img src="../../img/mpu-6050.jpg" alt="MPU-6050 module" height="240px" width="190px">
+				<p>For a while we wondered how we could know the drone's position in space. Obviously we thought to GPS, but precision of those technologies (if you want an affordable budget) is not precise enough. Of course, in the context of a drone which analyze outdoor and huge sized areas, GPS are interesting. But our robot will analyze only classroom. Then, a "meter scale precision" is too much larger. We rather need a "decimeter scale precision". Another solution has been evoked, create our own localization system by using triangulation with an antenna network. However, for financial reasons and weight reasons, this solution is not viable.</p>
+				<p>Actually, someone we know advised us to work with an accelerometer. This kind of component is a module which measures linear acceleration of a system. By knowing acceleration of our drone, we can determinate its speed and so it moves in space. Then, we decide to realize this option.</p>
+
+				<p>As we explained in the first article, the system has to communicate with a server. So, we have chosen a technology to realize this functionality. Firstly we have been thinking to use <a href="http://en.wikipedia.org/wiki/XBee">XBee</a> modules, which use the wireless protocol, defined by the <a href="http://en.wikipedia.org/wiki/IEEE_802.15.4">IEEE 802.15.4</a> standard. Those components are pretty expensive ($30), so we thought to another technology.</p>
+				<p>Actually we bought 2.3GHz transmitter. As the other components we have chosen, this one is cheap ($1), small sized (15x29mm) and light weighted (2g).</p>
+				<img src="../../img/nrf24l01.jpg" alt="NRF-24L01 module" height="263px" width="350px">
+				<p>Most of drones use an <a href="http://en.wikipedia.org/wiki/Electronic_speed_control">Electronic Speed Controller (ESC)</a> on each motor. This component is used to control motor's speed and its rotation. But you should notice it costs around $20. So you need $80 for a quadcopter. Beside the expensive price of this kind of model, it's important weight (25g/ESC) force us to think of another option.
+By using a MOFSET, basic components (capacitors, resistors, ...) and microcontroller, we can redesign the functionality of ESC technology.</p>
+				<img src="../../img/mofset.jpg" alt="mofset" height="300px" width="300px">
+				<p>To sum up, this is the list of components we have choosen :</p>
+					<ul>
+						<li>Crazyflie's motors ($3 ea.)</li>
+						<li>Crazyflie's battery ($5)</li>
+						<li>Crazyflie's blades ($5 per lot)</li>
+						<li>Arduino Pro Mini ($5)</li>
+						<li>Accelerometer + Gyroscope ($4)</li>
+						<li>2.4GHz transmetter ($1)</li>
+						<li>MOFSET ($5 for 10 units)</li>
+					</ul>
+				<p>With the chosen components we need approximately $30 for one drone. The full kit of Crazyflie is around $150. However, this first drone is only a prototype. We need to experiment our choice in order to improve them. Specifically, we hope our drone has a less swifter flight than the Crazyflie because ours is heavier.</p>
+				</p>
+				<h2>Sketch and PCB</h2>
+				<p>Waiting for the shipping, we began to draw the electric sketch of the robot and its PCB :</p>
+				<img src="../../img/drone_circuit_schema.png" alt="Sketch" height="348px" width="695px">
+				<img src="../../img/drone_circuit_pcb.png" alt="PCB" height="450px" width="400px">
+				<p>We designed this circuit with <a href="http://fritzing.org/home/">Fritzing</a>. An open source software which enables you to design graphically some electric circuits. After that you can print your own circuit from the files generated by this software.</p>
+				<p>You can download our file by clicking on this link : <a href="https://github.com/NjordProject/drone">Circuit of the drone</a>.</p>
+
+				<p>Like the Crazyflie, our robot doesn't have any frame. The circuit itself is used as a frame. Obviously it will be more vulnerable and less solid. However, the gain of weight and time allows us to estimate these risks acceptable. Furthermore, we assume that the mission of our drone (map an area) reduce the risk of shocks (which are usually the result of an excessive speed or acrobatics).
+However, this lack of choice of frame will be questioned if the drone is too fragile to perform its mission.</p>
+
+				<p>Now that you know all the parts of our drone and our technological choices, it's time to make it. But this will be for the next article.</p>
+        	</div>
+        </div>
+    </body>
+</html>
