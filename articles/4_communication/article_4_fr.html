@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Communication radio (NRF24L01)</h1>
+				<p>Dans l'article précédent nous vous avons présenté la bibliothèque que nous avons mise en place pour le contrôle des moteurs. Ces dernières semaines nous avons travaillé sur les émetteur/récepteur radio. Maintenant que notre bibliothèque est au point nous pouvons vous la présenter au travers cet article.</p>
+				<h2>Librairie</h2>
+				<p>Tout d'abord, voici une photo du composant en question. Tel qu'attendus, ils sont assez petits pour obtenir la dimension que nous désirons pour le drone.</p>
+				<img src="../../img/photo_com.jpg" alt="NRF24L01" height="300px" width="600px">
+				<p>Ces composants, fabriqués par <a href="http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24L01">Nordic Semiconductor</a> sont assez répandus dans la communauté d'Arduino. Ainsi une large gamme d'exemples est disponible sur Internet et de nombreuse bibliothèques pour la manipulation de ce composant sont mises à disposition librement (notamment sur GitHub). Nous avons alors profité du succès de ce composant en basant notre bibliothèque sur <i>RadioHead</i>, une bibliothèque proposée par <a href="https://github.com/PaulStoffregen/RadioHead">Paul Stoffregen</a>.</p>
+				<p>Nous représentons un transmetteur par une instance de la classe <i>Communication</i>. Voici la déclaration de cette classe :</p>
+				<p>
+					<pre><code class="c++">
+#include &ltSPI.h&gt
+#include &ltRH_NRF24.h&gt
+
+class Communication {
+private:
+	RH_NRF24 _nrf24;
+public:
+	Communication(int pin1, int pin2);
+ 	bool initRadio();
+	bool sendMsg(uint8_t* data, uint8_t len, uint8_t channel);
+	bool receiveMsg(uint8_t* data, uint8_t len, uint8_t channel);
+};
+					</code></pre>
+				</p>
+				<p>Comme vous pouvez le voir cette classe reste très minimaliste. Elle ne propose que trois méthodes. La première, <i>initRadio()</i>, se charge de tester l'état du composant en vérifiant la bonne initialisation, son canal, sa vitesse et sa puissance de transmission. Suivant ces différentes valeurs le composant pourra être considéré (ou pas) comme prêt à être utilisé.</p>
+				<p>
+					<pre><code class="c++">
+bool Communication::initRadio() {
+	bool state = true;
+	if(!_nrf24.init())
+			state = false;
+	if(!_nrf24.setChannel(1))
+			state = false;
+	if(!_nrf24.setRF(RH_NRF24::DataRate2Mbps, RH_NRF24::TransmitPower0dBm))
+			state = false;
+	return state;
+}
+					</code></pre>
+				</p>
+				<p>Les deux autres méthodes se chargent de l'envoie et de la réception de données et ne possèdent rien de particulier.</p>
+				<p>Plus concrètement, les messages que nous comptons envoyer seront de deux types :</p>
+					<ul>
+						<li>Message serveur</li>
+						<li>Message drone</li>
+					</ul>
+				<p>Les messages de type <i>serveur</i>, seront de simples tableaux d'entiers de taille 4. Ils permettront donc d'envoyer une position cible (c'est-à-dire trois composantes : x, y et z) à un drone.
+Les messages de type <i>drone</i>, seront quant à eux des tableaux d'entiers de taille 10. Un tableau contiendra donc une position (encore une fois x, y et z) et les valeurs obtenues par les six capteurs à ultrasons.</p>
+				<p>Quel que soit le type du message, on se réserve un entier supplémentaire dans le tableau, pour communiquer des codes entre le serveur et les drones. Ces codes pourront représenter des codes des erreurs, des informations sur l'état du drone et alors des ordres bien spécifiques.
+Par exemple si le serveur envoyait la valeur 0, cela pourrait dire au drone <i>"Retourne à la base"</i>. Ou bien si le drone envoyait la valeur 10, cela pourrait signifier <i>"Je n'ai plus beaucoup de batterie"</i>.</p>
+				<p>Comme d'habitude vous trouverez cette bibliothèque sur notre <a href="https://github.com/NjordProject/drone">GitHub</a>.</p>
+				<h2>Test</h2>
+				<p>Afin de tester le bon fonctionnement de notre librairie, nous avons écrit un code Arduino. Pour le tester il faut, bien entendu, deux montages.</p>
+				<p>
+					<pre><code class="c++">
+#include &ltSPI.h&gt
+#include &ltRH_NRF24.h&gt
+#include &ltcommunication.h&gt
+
+uint8_t msg[] = {1, 2, 3, 4};
+uint8_t len = sizeof(msg);
+bool ok;
+Communication com(8, 10);
+
+void setup() {
+	Serial.begin(9600);
+	ok = com.initRadio();
+	if(!ok)
+		Serial.println("Init error");
+}
+
+void loop() {
+	ok = com.sendMsg(msg, len, 1);
+	if(!ok)
+		Serial.println("Sending error");
+
+	ok = com.receiveMsg(msg, len, 1);
+	if(!ok)
+		Serial.println("Receiving error");
+	else
+		Serial.println(msg[0]);
+}
+					</code></pre>
+				</p>
+				<p>Ce code se contente d'instancier un objet de la classe <i>Communication</i> et de l'initialiser. Dans la boucle principale il envoie un message à l'autre montage et réceptionne un message de la part de ce dernier.</p>
+				<p>La bonne manipulation de ces composants nous a pris un peu de temps, car (de par le nombre important de bibliothèques déjà disponibles) nous avons fait un certain nombre de tests. Aussi, nous avons rencontré un problème : lorsque qu'un composant réceptionnait un message, nous n'arrivions pas à envoyer de réponse ou du moins pas de manière déterministe. Nous avons pu régler ce souci en mettant un condensateur de 10uF entre l'alimentation du composant et la masse. De ce que nous avons pu lire sur Internet cela serait dû à la faible puissance délivrée par la carte Arduino.</p>
+				<p>Le prochain article sera consacré à la présentation de la bibliothèque pour la manipulation du gyroscope.</p>
+        	</div>
+        </div>
+    </body>
+</html>
