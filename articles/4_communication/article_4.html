@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Radio communication (NRF24L01)</h1>
+				<p>In the previous article we presented you the library we wrote in order to control motors. The last weeks we worked on radio transmitter/receiver. Now the library has been developed we can present it to you through this article.</p>
+				<h2>Bibliothèque</h2>
+				<p>First, this a photo of the concerned component. As we expected, it is small enough to get the desired dimension for our drone.</p>
+				<img src="../../img/photo_com.jpg" alt="NRF24L01" height="300px" width="600px">
+				<p>Those components, produced by <a href="http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24L01">Nordic Semiconductor</a> are well known by Arduino community. Thereby, a wide catalog of examples and a lot of opensource libraries are available on the Internet (especially on GitHub). Then, we took advantage of the success of this component by basing our library on <i>RadioHead</i>, which is offered by <a href="https://github.com/PaulStoffregen/RadioHead">Paul Stoffregen</a>.</p>
+				<p>We represent this component by an instance of <i>Communication</i> class. This is the declaration of this class :</p>
+				<p>
+					<pre><code class="c++">
+#include &ltSPI.h&gt
+#include &ltRH_NRF24.h&gt
+
+class Communication {
+private:
+	RH_NRF24 _nrf24;
+public:
+	Communication(int pin1, int pin2);
+ 	bool initRadio();
+	bool sendMsg(uint8_t* data, uint8_t len, uint8_t channel);
+	bool receiveMsg(uint8_t* data, uint8_t len, uint8_t channel);
+};
+					</code></pre>
+				</p>
+				<p>As you can see this class is very minimalist. It has only one attribute and three methods. The attributes represents the component and it comes from <i>Radiohead</i> library. It is with this attribute and the methods we have written that we will ensure communication between the drone and the server. The first method, <i>initRadio()</i>, handles various tests about the state of the component. It checks if the component has been well initialized, its channel, its speeds and power of transmission. Depending on values, the component will be considered ready to be used (or not).</p>
+				<p>
+					<pre><code class="c++">
+bool Communication::initRadio() {
+	bool state = true;
+	if(!_nrf24.init())
+			state = false;
+	if(!_nrf24.setChannel(1))
+			state = false;
+	if(!_nrf24.setRF(RH_NRF24::DataRate2Mbps, RH_NRF24::TransmitPower0dBm))
+			state = false;
+	return state;
+}
+					</code></pre>
+				</p>
+				<p>The other two methods handle data transmission and reception and are not particular.</p>
+				<p>More concretely, the messages we have sent are of two types:</p>
+					<ul>
+						<li>Server message</li>
+						<li>Drone message</li>
+					</ul>
+				<p>Messages which come from the <i>server</i> are simple integer vectors of size 4. They allow to send a target position (i.e, three components x, y and z) to a drone.
+Messages which come from a <i>drone</i> are integer vectors of size 10. One vector, will contains a position (x, y and z) and the values collected by the six ultrasonic sensors.</p>
+				<p>Regardless the type of message, we reserve the last value of the vector in order to communicate some code between the server and drones. These codes could represent error codes, information about the state of a drone or some specific commands.
+For instance, if the server send the value 0, it could means <i>"Come back to the HQ"</i>. Or, if the drone send the value 10, it could means <i>"I have no more battery"</i></p>
+				<p>As usual you can download our library on our <a href="https://github.com/NjordProject/drone">GitHub</a>.</p>
+				<h2>Test</h2>
+				<p>In order to check the smooth running of our library, we have written an Arduino source code. <i>If you want to try it, you need of course two installations.</i></p>
+				<p>
+					<pre><code class="c++">
+#include &ltSPI.h&gt
+#include &ltRH_NRF24.h&gt
+#include &ltcommunication.h&gt
+
+uint8_t msg[] = {1, 2, 3, 4};
+uint8_t len = sizeof(msg);
+bool ok;
+Communication com(8, 10);
+
+void setup() {
+	Serial.begin(9600);
+	ok = com.initRadio();
+	if(!ok)
+		Serial.println("Init error");
+}
+
+void loop() {
+	ok = com.sendMsg(msg, len, 1);
+	if(!ok)
+		Serial.println("Sending error");
+
+	ok = com.receiveMsg(msg, len, 1);
+	if(!ok)
+		Serial.println("Receiving error");
+	else
+		Serial.println(msg[0]);
+}
+					</code></pre>
+				</p>
+				<p>This code simply instantiate an object from <i>Communication</i> class and initializes it. In the main loop it sends a message to the other installation and receipts a message from the latter.</p>
+				<p>The proper manipulation of these components takes us some time because we have tried a lot of different libraries. Also, we faced to a problem : when a component received a message, we could not send a response (or not deterministically). We solved this by adding a capacitor (10uF) between supply and ground. If we refer on what we read on the Internet this issue is due to the low power supplied by the Arduino board.</p>
+				<p>The next article will focus on the presentation of library to handle gyroscope.</p>
+        	</div>
+        </div>
+    </body>
+</html>
