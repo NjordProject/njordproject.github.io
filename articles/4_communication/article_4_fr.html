@@ -43,7 +43,7 @@ public:
 };
 					</code></pre>
 				</p>
-				<p>Comme vous pouvez le voir cette classe reste très minimaliste. Elle ne propose que trois méthodes. La première, <i>initRadio()</i>, se charge de tester l'état du composant en vérifiant la bonne initialisation, son canal, sa vitesse et sa puissance de transmission. Suivant ces différentes valeurs le composant pourra être considéré (ou pas) comme prêt à être utilisé.</p>
+				<p>Comme vous pouvez le voir cette classe reste très minimaliste. Elle ne propose qu'un attribut et trois méthodes. L'attribut représente le composent et il provient de la bibliothèque <i>Radiohead</i>. C'est à l'aide de cet attribut et des méthodes que nous avons écrites que nous allons assurer la communication entre le drone et le serveur. La première méthode, <i>initRadio()</i>, se charge de tester l'état du composant en vérifiant la bonne initialisation, son canal, sa vitesse et sa puissance de transmission. Suivant ces différentes valeurs le composant pourra être considéré (ou pas) comme prêt à être utilisé.</p>
 				<p>
 					<pre><code class="c++">
 bool Communication::initRadio() {
