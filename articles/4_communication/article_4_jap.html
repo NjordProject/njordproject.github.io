@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>無線通信(NRF24L01)</h1>
+				<p>さっきの記事ではモーターの管制する為にライブラリを書いた私たちの紹介しました。最近は、無線通信のコンポーネントに私たちが働いていました。今、ライブラリは出来上がりましたから、無線通信のライブラリを紹介します。</p>
+				<h2>ライブラリ</h2>
+				<p>始めに以下の写真は問題になっているコンポーネントの写真です。予想通り、このコンポーネントがドローンの欲しい大きさを取得する為に、十分に小さいです。</p>
+				<img src="../../img/photo_com.jpg" alt="NRF24L01" height="300px" width="600px">
+				<p>このコンポーネントは<a href="http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24L01">Nordic Semiconductor</a>が作ります。Arduinoの共通性の中でNRF24L01がとても有名です。だから、インターネットに使用例とライブラリがたくさんあります。それでは、私たちがこのコンポーネントの成功を利用して、<i>Radiohead</i>のライブラリに基づいて私たちのライブラリを構築しています。<i>Radiohead</i>のライブラリは<a href="https://github.com/PaulStoffregen/RadioHead">Paul Stoffregen</a>が提案しています。</p>
+				<p>一台の送信機は私たちの<i>Communication</i>のクラスのインスタンスで表現します。以下のコードは<i>Communication</i>のクラスの声明です。</p>
+				<p>
+					<pre><code class="c++">
+#include &ltSPI.h&gt
+#include &ltRH_NRF24.h&gt
+
+class Communication {
+private:
+	RH_NRF24 _nrf24;
+public:
+	Communication(int pin1, int pin2);
+ 	bool initRadio();
+	bool sendMsg(uint8_t* data, uint8_t len, uint8_t channel);
+	bool receiveMsg(uint8_t* data, uint8_t len, uint8_t channel);
+};
+					</code></pre>
+				</p>
+				<p>ご覧のように、このクラスは素朴です。	アトリビュートだけ一つとメソッドだけ三つがあります。アトリビュートは<i>Radiohead</i>のライブラリから来て、一台のNRF24L01を表現します。このアトリビュートとメソッドでドローンとサーバーの間通話を確かめます。<i>initRadio()</i>のメソッドはコンポーネントの状態に色々なテストをします。正しい初期化とチャンネルと伝送速度と伝達動力のチェックします。値に応じて準備の出来たと見做すか否か。</p>
+				<p>
+					<pre><code class="c++">
+bool Communication::initRadio() {
+	bool state = true;
+	if(!_nrf24.init())
+			state = false;
+	if(!_nrf24.setChannel(1))
+			state = false;
+	if(!_nrf24.setRF(RH_NRF24::DataRate2Mbps, RH_NRF24::TransmitPower0dBm))
+			state = false;
+	return state;
+}
+					</code></pre>
+				</p>
+				<p>他の二つメソッドはデータのトランスミッションとデータのレセプションを処理するが、特じゃありませんだから、この記事で私たちが説明をしません。</p>
+				<p>具体的に、メッセージのタイプが二つあります：</p>
+					<ul>
+						<li>サーバーのメッセージ</li>
+						<li>ドローンのメッセージ</li>
+					</ul>
+				<p><i>サーバー</i>から来るメッセージは整数の配列です。レングスは４です。目標位置(xとyとz)をドローンへ連絡します。
+<i>ドローン</i>から来るメッセージも整数の配列ですが、レングスは10です。目標位置(xとyとz)と六台の超音波センサーの値を連絡します。</p>
+				<p>メッセージのタイプに関係なく、追加の数があります。この最後の数はエラーコードやドローンの状態について情報や特定な要求を連絡する為。例えば、もしサーバーがドローンへ０の値を送れば、<i>「基地に帰りなさい」</i>の意味するかもしれません。そして、もし、ドローンがサーバーへ10の値を送れば、<i>「電池もうありません」</i>の意味するかもしれません。</p>
+				<p>いつものように私たちの<a href="https://github.com/NjordProject/drone">GitHub</a>でライブラリをダウンロード出来ます。</p>
+				<h2>テスト</h2>
+				<p>私たちのライブラリの実行を確かめる為に、私たちがテストコードをArduino語で書きました。<i>もし、方はこのライブラリを使ってみたいと、二台の電気回路が要ります。</i></p>
+				<p>
+					<pre><code class="c++">
+#include &ltSPI.h&gt
+#include &ltRH_NRF24.h&gt
+#include &ltcommunication.h&gt
+
+uint8_t msg[] = {1, 2, 3, 4};
+uint8_t len = sizeof(msg);
+bool ok;
+Communication com(8, 10);
+
+void setup() {
+	Serial.begin(9600);
+	ok = com.initRadio();
+	if(!ok)
+		Serial.println("Init error");
+}
+
+void loop() {
+	ok = com.sendMsg(msg, len, 1);
+	if(!ok)
+		Serial.println("Sending error");
+
+	ok = com.receiveMsg(msg, len, 1);
+	if(!ok)
+		Serial.println("Receiving error");
+	else
+		Serial.println(msg[0]);
+}
+					</code></pre>
+				</p>
+				<p>以上のコードは単に<i>Communication</i>のクラスから一つのオブジェクトをインスタンス化して初期化します。主要なループで同じチャンネルを使う他のコンポーネントと連絡します。</p>
+				<p>私たちがたくさん別なライブラリを使ってみましたから、このコンポーネントを正しく使うのがたくさん時間を掛かりました。そして、問題に向かいました：BのコンポーネントからAのコンポーネントはメッセージを取り受けったら、Bへ返事を送りませんでした（かどうか確定的に）。私たちがサプライとグランドの間に10uFのコンデンサを追加しました。もし、私たちがインターネットで読んだ事に参照しますと、Arduinoボードは低いサプライを引き渡しますから。</p>
+				<p>次の記事はジャイロスコープのライブラリについてです。</p>
+        	</div>
+        </div>
+    </body>
+</html>
