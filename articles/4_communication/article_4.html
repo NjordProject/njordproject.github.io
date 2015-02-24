@@ -65,7 +65,7 @@ bool Communication::initRadio() {
 						<li>Drone message</li>
 					</ul>
 				<p>Messages which come from the <i>server</i> are simple integer vectors of size 4. They allow to send a target position (i.e, three components x, y and z) to a drone.
-Messages which come from a <i>drone</i> are integer vectors of size 10. One vector, will contains a position (x, y and z) and the values collected by the six ultrasonic sensors.</p>
+Messages which come from a <i>drone</i> are integer vectors of size 11. One vector, will contains the drone number (channel), a position (x, y and z) and the values collected by the six ultrasonic sensors.</p>
 				<p>Regardless the type of message, we reserve the last value of the vector in order to communicate some code between the server and drones. These codes could represent error codes, information about the state of a drone or some specific commands.
 For instance, if the server send the value 0, it could means <i>"Come back to the HQ"</i>. Or, if the drone send the value 10, it could means <i>"I have no more battery"</i></p>
 				<p>As usual you can download our library on our <a href="https://github.com/NjordProject/drone">GitHub</a>.</p>
