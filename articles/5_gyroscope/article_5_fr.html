@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Gyroscope (MPU6050)</h1>
+				<p>La dernière fois nous avons vu comment nous allions gérer la communication entre un drone et le serveur. En parallèle, un membre du groupe de projet travaillait sur le composant qui va nous servir à stabiliser le vol du drone. Nous allons, justement présenter ce composant par le biais de cet article.</p>
+				<h2>Explication du gyroscope</h2>
+				<p>Le <a href="http://fr.wikipedia.org/wiki/Gyroscope">gyroscope</a>, crée par Foucault en 1852 est un appareil constitué d'un rotor, associé à trois cercles extérieurs. Ces cercles extérieurs sont reliés entre eux de telle façon que le rotor ait trois degrés de liberté par rapport au dernier cercle extérieur (soit la matrice degrée de liberté = {0, 0, 0, Rx, Ry, Rz}/cercle exterieur).</p>
+				<p>Grâce à cette caractéristique, le gyroscope profite d'un principe physique appelé principe de conservation du <a href="http://fr.wikipedia.org/wiki/Moment_cin%C3%A9tique_%28m%C3%A9canique_classique%29">moment cinétique</a>, ou effet gyroscopique. Cet effet implique que lorsqu'on applique une force sur un solide en rotation (le rotor dans notre cas), il se crée une force perpendiculaire au sens de rotation. Dans le cas du gyroscope, du fait de la présence des trois degrés de liberté, cette force ainsi que la force initiatrice du mouvement seront alors absorbées par les anneaux extérieurs. Par conséquent, le rotor ne subira aucune de ces force et restera fixe par rapport aux repère galiléen. En étudiant le mouvement des anneaux extérieurs, il sera alors possible de connaitre le déplacement du gyroscope par rapport au rotor, soit par rapport au repère galiléen.</p>
+				<h2>Utilisation du gyroscope</h2>
+				<h3>Utilité et besoin</h3>
+				<p>Les gyroscopes sont des capteurs couramment utilisés dans les appareils en mouvement. En effet, du fait de leur capacité à fournir des informations fiables sur l'orientation de l'objet, ils sont particulièrement utiles afin de connaitre l'inclinaison d'appareil que ce soit pour des manoeuvres (par exemple, tourner pour un avion) ou se stabiliser (en cherchant à minimiser cette inclinaison).<br>
+C'est dans ce but qu'un gyroscope a été introduit dans le montage de notre drone.</p>
+				<h3>Le gyroscope dans notre montage</h3>
+				<p>Le gyroscope choisi pour intégrer notre drone est un MPU6050. Ce type de gyroscope, particulièrement répandu dans l'industrie, présente l'avantage d'être compatible avec notre montage, d'être relativement abordable financièrement et de posséder un accéléromètre. Cet accéléromètre étant destiné à nous fournir des informations sur le déplacement et la position de notre drone. Mais nous reviendrons sur ce point dans un prochain article.</p>
+				<img src="../../img/gyroscope_mpu6050.jpg" alt="MPU6050" height="300px" width="600px">
+				<p>Ce capteur est constitué de trois axes (les axes <i>X</i> et <i>Y</i> étant indiqués sur la carte, l'axe <i>Z</i> étant perpendiculaire à la plaque).<br>
+Puisqu'il faut que l'effet gyroscopique puisse s'appliquer sur le gyroscope, l'ensemble des angles pouvant être mesurés appartiennent à [-80, 80].  Passé cette valeur, la gravité serait trop proche de la composante crée par l'effet gyroscopique, ce qui fausserait les mesures.<br>
+Les mesures de rotations autour de l'axe <i>Z</i> varient quant à eux entre -180° et 180°.</p>
+				<p>Afin d'utiliser le MPU6050 dans notre montage, nous nous sommes largement inspiré des travaux de <a href="http://www.i2cdevlib.com/devices/mpu6050">Jeff Rowberg</a> qui propose un code permettant de mesurer les valeurs obtenues par les capteurs.<br> 
+Fort de ces informations, une analyse est effectuée afin de définir l'inclinaison de notre drone. Il convient ensuite de piloter les moteurs afin d'effectue le traitement adéquat. Puisque notre drone à pour but de mesurer une topographie, il est nécessaire d'obtenir un drone en vol stationnaire, soit parallèle au sol. Les moteurs sont donc gouvernés par le gyroscope afin se stabiliser.</p>
+        	</div>
+        </div>
+    </body>
+</html>

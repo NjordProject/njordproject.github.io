@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Gyroscope (MPU6050)</h1>
+				<p>The last time we talked about how to manage communication between one drone and the server. In parallel, one member of the project's group was working on the component which allows us to stabilize the drone's flight. Then, we present this component through this article.</p>
+				<h2>Explication du gyroscope</h2>
+				<p><a href="http://en.wikipedia.org/wiki/Gyroscope">Gyroscope</a> was created by Foucault in 1852. It is a device formed by a rotor, which is associated with three exterior circles. Those circles are linked between them in such a way that the rotor has degrees of freedom according to the former circle (in a mathematical way, we have a matrix of freedom = {0, 0, 0, Rx, Ry, Rz}/exterior circle).</p>
+				<p>Thanks to that feature, gyroscope takes advantage of the physical principle <a href="http://en.wikipedia.org/wiki/Angular_momentum">conservation of angular momentum</a>, also known as gyroscopic effect. It implies, when you apply a force on a rotating solid (in our case, the rotor), a force is created perpendicularly to the rotation. In the case of gyroscope, due to the three degrees of freedom, this force and the initiating force of movement will be absorbed by the external rings. Then, the rotor will not be subjected to any force and remains stationary relative to the inertial frame of reference. It is possible to know the gyroscope's movement relative to the rotor (i.e. Galilean reference frame), by analysing the movement of external rings.</p>
+				<h2>Using a gyroscope</h2>
+				<h3>Usefulness and needing</h3>
+				<p>Gyroscopes are sensors usually used on moving devices. Indeed, due to their capacity to supply some reliable information about orientation of the device and particularly to know its tilt. For example, to manage maneuvers or to help to stabilization. The former example, is the needing of our problem.</p>
+				<h3>Gyroscope on our drone</h3>
+				<p>We chose to integrate a MPU6050 on our drone. This gyroscope is particularly used in industry, compatible with our device, cheap and offers an accelerometer on the same chip. We want to use the accelerometer in order to get some information about the movement of our drone and try to determine its position in space. However, this is not the subject of this article..</p>
+				<img src="../../img/gyroscope_mpu6050.jpg" alt="MPU6050" height="300px" width="600px">
+				<p>This sensor is consisting of three axis (<i>X</i> and <i>Y</i> axis are indicated on the chip, <i>Z</i> axis is perpendicular to the chip). Because we need gyroscopic effect applied on the gyroscope, angles which can be measured belong to [-80°, 80°] set. Beyond those values, gravity would be too close to the component created by gyroscopic effect and would distort measures. Rotation measures around <i>Z</i> axis vary  on [-180°, 180°] set.</p>
+				<p>In order to use MPU6050, we inspired by <a href="http://www.i2cdevlib.com/devices/mpu6050">Jeff Rowberg</a>'s work which offers a code for measuring values obtained by the sensors.<br>
+With those measures, we can analyze tilt of our drone. Then, we can control each motor and apply the suitable treatment in order to stabilize the device. Because, the final goal of our project is to measure a topography, it is necessary to get a hovering flight (e.g. parallel to the floor). Then, we can say that motors are ruled by the gyroscope.</p>
+        	</div>
+        </div>
+    </body>
+</html>
