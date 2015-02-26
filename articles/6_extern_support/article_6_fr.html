@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Aide extérieure</h1>
+				<p>Maintenant que nous avons toutes les pièces et que les librairies de chaque composants ont été développées il nous faut assembler le tout. Cependant, notre école ne disposant ni d'imprimante 3D ni du matériel nécessaire pour la réalisation d'un circuit imprimé, nous avons dû faire appel à des aides extérieures. Le but de cet article est de présenter ceux qui nous ont aidés et ce que nous en avons obtenu.</p>
+				<h2>Fixations moteurs</h2>
+				<p>Étant donné que nous avons choisi d'utiliser les mêmes moteurs que le Crazyflie, nous sommes plus ou moins contraint d'utiliser le même système de fixation qu'eux. Cette fixation est une petite pièce en plastique, avec une forme pipée. En fait, du circuit imprimé partent quatre branches auxquelles les fixations viendront s'emboîter. Ensuite, les moteurs peuvent à leur tour se loger dans l'autre extrémité de la pièce.</p>
+				<img src="../../img/fixation_crazyflie.png" alt="fixation_crazyflie" height="250px" width="500px">
+				<p>Ces pièces ne sont pas disponibles à l'achat, mais  Bitcraze fournit, sur son répertoire <a href="https://github.com/bitcraze/bitcraze-mechanics/blob/master/motor-mounts/CF_mm_proto.stl">GitHub</a>, un fichier modélisant la pièce. Ainsi, il est possible de l'imprimer en 3D. Cependant, comme expliqué plus haut notre école ne disposant pas d'imprimante 3D nous avons dû chercher un moyen de la faire imprimer.</p>
+				<p>Durant le mois de décembre 2014, notre école a accueilli la compétition annuelle de robotique, <a href="http://www.robafis.fr/RobAFIS/Bienvenue.html"><i>Robafis</i></a>. Lors de cette compétition quelques entreprises sont venues exposer leurs produits (en rapport avec la robotique). Notamment, <a href="http://www.polytech-instrumentation.fr/fr/p-idp1000000074/accueil.html">Polytech</a> (une filiale de <a href="http://www.jeulin.fr/fr/p-idp1024135/accueil.html">Jeulin</a>) qui exposait des imprimantes 3D.</p>
+				<img src="../../img/Polytech_Instrumentation.jpg" alt="logo_polytech" height="100px" width="350px">
+				<p>Après discussion, Polytech a acceptée de nous fabriquer gratuitement les pièces dont nous avions besoin. Une semaine plus tard, nous avons reçu une enveloppe de leur part contenant les fameuses fixations.</p>
+				<img src="../../img/fixations.png" alt="Fixations" height="300px" width="600px">
+				<p>Toutefois, nous avons eu besoin de retravailler un petit peu les pièces, à l'aide d'une fraiseuse, afin d'élargir un peu les embouchures.</p>
+				<h2>Circuit</h2>
+				<p>Lors d'un ancien article nous vous avions présenté le schéma électrique du montage. À l'aide de Fritzing, il est possible de dessiner le PCB. Ainsi, on peut exporter les fichiers qui serviront à la réalisation du montage. Cependant, comme expliqué plus haut, notre école ne dispose pas du matériel nécessaire. Ainsi, nous nous sommes tournés vers l'<a href="http://www.ensea.fr/">ENSEA</a> qui est une école proche de la nôtre, spécialisée dans l'ingénierie électronique.</p>
+				<p>Avec notre logiciel de modélisation (Fritzing) nous avons alors généré des fichiers <i>gerber</i> et les avons transmis à un membre de l'ENSEA. Quelques jours après il nous a contactés pour nous informer que notre carte était prête.</p>
+				<img src="../../img/carte_avant.jpg" alt="carte avant découpage" height="300px" width="600px">
+				<p>Étant donné que nous souhaitons fixer les moteurs sur la carte directement, à l'aide des fixations, il nous a fallu la découper afin d'obtenir les branches désirées.</p>
+	<img src="../../img/carte_apres.jpg" alt="carte après découpage" height="300px" width="600px">
+				<p><b>Attention :</b><br>
+Depuis l'article dans lequel nous vous présentions le schéma du drone et ce qui a été finalement réalisé le schéma a été modifié. Le voici ci-dessous :</p>
+				<img src="../../img/nouveau_drone_circuit_pcb.png" alt="nouveau schéma" height="500px" width="500px">
+				<p>Vous noterez que le communicateur n'est pas présent sur la carte. Le modèle de ce composant est téléchargeable sur Internet, mais le modèle PCB n'est pas complet. N'ayant pas réussi à l'éditer, nous avons abandonné et nous le rajouterons avec de simples fils.</p>
+        	</div>
+        </div>
+    </body>
+</html>

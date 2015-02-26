@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>External support</h1>
+				<p>Now we have received every components and developed each library we have to assemble everything. However, because our school does not have nor 3D printer nor necessary equipment for realization of a circuit, we searched external help. The goal of this article is to present who helped us and what we got from them. 
+</p>
+				<h2>Motors attachments</h2>
+				<p>Because we decided to use same motors as Crazyflie ones, we are roughly constraint to use the same attachment system. That fixation is a small plastic piece with a piped form. Indeed, four branches come from the circuit, and fixations will fit them. Then, motors can fit the other tip of fixation.</p>
+				<img src="../../img/fixation_crazyflie.png" alt="crazyflie motors attachments" height="250px" width="500px">
+				<p>Those pieces are not available for purchase, but Bitcraze supplies, on its <a href="https://github.com/bitcraze/bitcraze-mechanics/blob/master/motor-mounts/CF_mm_proto.stl">GitHub repository</a>, a file which models the fixation. Therefore, it is possible to print it in 3D. However, as explained above, because our school does not have any 3D printer we had to search a way to print it.</p>
+				<p>In December 2014, our school has hosted the annual robotic competition, <a href="http://www.robafis.fr/RobAFIS/Bienvenue.html"><i>Robafis</i></a>. During this competition some companies were exposing their products (related to robotic). Especially, <a href="http://www.polytech-instrumentation.fr/fr/p-idp1000000074/accueil.html">Polytech</a> (subsidiary of <a href="http://www.jeulin.fr/en/p-idp1024135/accueil.html">Jeulin</a>) which was exposing 3D printers.</p>
+				<img src="../../img/Polytech_Instrumentation.jpg" alt="logo_polytech" height="100px" width="350px">
+				<p>After discussion, Polytech agreed to print our pieces for free. One week after, we received an envelope containing our request.</p>
+				<img src="../../img/fixations.png" alt="attachments" height="300px" width="600px">
+				<p>However, we had to rework each piece, with a milling machine, in order to slightly widen mouthpieces.</p>
+				<h2>Circuit</h2>
+				<p>In one of the previous articles we presented you the electrical scheme of our drone. With Fritzing it is possible to draw a PCB. Then, you can export files which are used to realize your circuit. However, as explained above, our school does not have necessary equipment. That is why we ask to <a href="http://www.ensea.fr/en">ENSEA</a> which is a school near EISTI and specialized in electronic engineering.</p>
+				<p>With Fritzing we have generated <i>gerber</i> files and sent them to an ENSEA member. After few days, he contacted us to inform that our circuit was ready.</p>
+				<img src="../../img/carte_avant.jpg" alt="board before cutting" height="300px" width="600px">
+				<p>Because we want to bind motors directly on the board, using fixations, we had to cut the board in order to obtain the desired branches.</p>
+	<img src="../../img/carte_apres.jpg" alt="board after cutting" height="300px" width="600px">
+				<p><b>Warning:</b><br>
+Since the article where we presented the schema of our drone, the schema has been modified. Please look at below:</p>
+				<img src="../../img/nouveau_drone_circuit_pcb.png" alt="new schema" height="500px" width="500px">
+				<p>You can notice there is no radio transmitter/receiver on the board. The model of this component can be downloaded on the Internet, but the PCB model is incomplete. We could not edit it, then we gave up and we will plug it by adding additional wires.</p>
+        	</div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>外から援助</h1>
+				<p>コンポーネントを全部受け取ってライブラリを作りましたから、ドローンを組み合わせなければなりません。けれど、私たちの大学は3Dプリンターもを回路を作る為に設備も持っていませんから、外へ助けを頼みました。この記事の目的は私たちを助けた会社と助けた会社より受け取った製品を紹介します。</p>
+				<h2>モーターの固定具</h2>
+				<p>Crazyflieのモーターを使う事が決めましたから、Crazyflieと同じモーターの固定具を使わなければなりません。この固定具はプラで作った小さいパイプ形の部品です。実は、回路から枝を四枚通り過ぎます。この枝に固定具を固定します。これから、モーターを固定具に固定します。</p>
+				<img src="../../img/fixation_crazyflie.png" alt="Crazyflieの固定具" height="250px" width="500px">
+				<p>この部品を買う事が出来ませんが、<a href="https://github.com/bitcraze/bitcraze-mechanics/blob/master/motor-mounts/CF_mm_proto.stl">BitcrazeのGitHub</a>にモデル化するファイルをダウンロード出来ます。そして、このファイルから固定具を3Dプリンターでプリント出来ます。然し、上述したように私たちの大学は3Dプリンターを持っていませんから、外へ助けを探しました。</p>
+				<p>2014年12月に、私たちの大学で<a href="http://www.robafis.fr/RobAFIS/Bienvenue.html"><i>Robafis</i></a>(毎年のロボットの競争)がありました。この時、製品を展覧会する会社がありました。特に、<a href="http://www.polytech-instrumentation.fr/fr/p-idp1000000074/accueil.html">Polytech</a>(<a href="http://www.jeulin.fr/fr/p-idp1024135/accueil.html">Jeulin</a>の子会社です)は3Dプリンターを展覧会しました。</p>
+				<img src="../../img/Polytech_Instrumentation.jpg" alt="Polytechのロゴ" height="100px" width="350px">
+				<p>話した後で、Polytechが私たちの為に、固定具を作る事が承諾しました。一週間後、私たちは封筒を受け取りました。封筒の中に欲しい部品がありました。</p>
+				<img src="../../img/fixations.png" alt="固定具" height="300px" width="600px">
+				<p>然し、穴を少し広げる為に、フライス盤で固定具を再加工しなければなりました。</p>
+				<h2>回路</h2>
+				<p>旧記でドローンの回路を紹介しました。FritzingのソフトウェアでPCBを描く事が出来ます。だから、回路を現実する為にファイルを輸出のが出来ます。けれど、上述したように、私たちの大学は回路を作る為に設備も持っていません。これから、電子工学の近い大学の<a href="http://www.ensea.fr/">ENSEA</a>に助けを頼みました。</p>
+				<p>私たちがFritzingで<i>gerber</i>ファイルを作ってENSEA員にファイルを渡しました。数日後、ENSEA員は私たちに回路を作って出来たと知らせました。</p>
+				<img src="../../img/carte_avant.jpg" alt="切り前回路" height="300px" width="600px">
+				<p>回路から枝が必要だったから、枝を得る為に私たちが回路を切りました。</p>
+	<img src="../../img/carte_apres.jpg" alt="切り後回路" height="300px" width="600px">
+				<p><b>ご注意:</b><br>
+ドローンの電気スキーマの紹介する記事から、電気スキームを変更しました。下に見て下さい：</p>
+				<img src="../../img/nouveau_drone_circuit_pcb.png" alt="最後スキーム" height="500px" width="500px">
+				<p>電気スキームに無線通信はないのが見えます。このコンポーネントのモデルをインターネットでダウンロード出来ますけど、PCBのモデルは不完全です。修正出来ませんでしたから、諦めました。無線通信を線で回路に入れます。</p>
+        	</div>
+        </div>
+    </body>
+</html>
