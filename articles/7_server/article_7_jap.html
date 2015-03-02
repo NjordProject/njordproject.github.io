@@ -138,8 +138,11 @@ data = np.zeros([0, 0])
 fig, ax = plt.subplots()
 cax = ax.imshow(data, cmap = cm.hot_r, origin = "lower")
 ax.set_title(name_area + "'s topography")
-cbar = fig.colorbar(cax, ticks = [0, 100, 200])
-cbar.ax.set_yticklabels(["< 0", "100", "> 200"])
+cbar = fig.colorbar(cax)
+cbar.ax.get_yaxis().set_ticks([])
+cbar.ax.text(1.2, 0, "> 0", ha="left", va="center")
+cbar.ax.text(1.2, 0.5, "150", ha="left", va="center")
+cbar.ax.text(1.2, 1, "< 300", ha="left", va="center")
 ax.patch.set_facecolor('white')
 plt.show(block = False)
 
@@ -155,7 +158,7 @@ while True:
 		tmp = np.zeros([data.shape[0], e[2]])
 		tmp[0:data.shape[0], 0:data.shape[1]] = data
 		data = tmp
-	if e[3] - e[9] < 0: #If distance > 5m
+	if e[3] - e[9] < 0: #If distance > Max distance
 		data[e[1] - 1, e[2] - 1] = 0
 	else:
 		data[e[1] - 1, e[2] - 1] = e[3] - e[9]
