@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Assembly</h1>
+				<p>Not long ago that we had all components to build our drone. Recently we built it. However, we did not obtain expected results. This article is here in order to present what we have obtained and to take stock of the situation.</p>
+				<h2>Situation</h2>
+				<p>As explained above we have assembled every elements. We have welded components to the board and stuck motor's attachments on the board with composite glue.<br>
+This is a photo of the result:</p>
+				<img src="../../img/drone_photo.jpg" alt="drone photo" height="350px" width="600px">
+				<p>After to have assembled the drone, we wrote a simple code in order to test good working of motors. Afterwards, we tried to run them at full speed for taking it off. But this was not enough. Then, we noticed an issue. When we supply 255 value to motors (maximum value that Arduino can supply), they cannot rotates to the maximum of their capacity. At the moment we cannot explain the reason of this issue.<br>
+Furthermore, when we have received the board, we found it very heavy. Honestly, we wondered if it could fly. And, effectively he cannot do it. It seems, we have underestimated the weight of the circuit in our estimations. We do not know the its weight, but visibly it is the heaviest element of our drone while we only add 10% on the sum of the weight of all components.</p>
+				<p>In a second time we linked motors directly on supply. This time motors rotate at the maximum of their capacity except one. Then, the drone turns on itself instead of taking off. We can see it does not need much to do it.<br>
+However, even if we could ensure that the four motors rotates at the same speed, we could not control the speed (then we could not stop the drone) because motor are no longer supplied by Arduino.</p>
+				<p>This is a short video showing moving drone when motor are directly supplied by battery.</p>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/HgmdSlyjn5w?rel=0" frameborder="0" allowfullscreen></iframe>
+				<h2>What to do from now ?</h2>
+				<p>In a first time we will try to find the cause of the two issues mentioned above and try to fix them.<br>
+If we are able to get the four motor rotating at the same speed and if we are able to make them rotating at full speed by supplying it with Arduino (thus to be able to regulate the speed), then we could think about a second prototype.</p>
+				<p>However, because project's deadline is approaching apace (in approximately one month) we probably do not have enough time for building this second drone. But we still can think about it and give an estimation by considering the mistakes we have already done.</p>
+				<p>With the approaching project's deadline we have also to present what we have realized (in approximately two weeks). At the moment we have a server which can draw the topography of an area from drone's data. In order to substitute our drone we could use the <a href="http://en.wikipedia.org/wiki/Parrot_AR.Drone">ARDrone</a> of our class. Indeed, this one is able to compute its position from its movements and to measure the distance between it and what is under. If we could find a way to get this data, we would only have to send it to our server.<br>
+However, this drone has been already used extensively, it is roughly damaged and has some difficulties to stabilize itself.</p>
+				<p>In the coming days we will think about how to get computed data from ARDrone and check if it is in fairly good condition for flying during the presentation of our project.</p>
+        	</div>
+        </div>
+    </body>
+</html>

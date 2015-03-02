@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>組み立て</h1>
+				<p>少し前まで、私たちは全部のドローンの成分を持っていますと発表しました。最近、ドローンを組み立てました。然し、期待な結末を得ませんでした。この記事は結末を紹介して、立場の分析をします。</p>
+				<h2>立場</h2>
+				<p>上述したように私たちが全部の成分を組み立てました。回路に成分を溶接して、接着剤でモーターの固定具を貼りました。</p>
+				<p>下には、結末の写真です。</p>
+				<img src="../../img/drone_photo.jpg" alt="ドローンの写真" height="350px" width="600px">
+				<p>組み立てた後、モーターの行いのテストの簡単なコードを書きました。そして、全速でモーターを行ってみましたけど、足りません。この時、問題を確認しました。モーターに255の値(Arduinoが最大値を供給できます)を供給したら、モーターは最大容量で行いません。今、問題の原因が分かりません。<br>
+さらに、回路を受け取った時、とても重いと思いました。実は、私たちはドローンが飛ぶ事が出来るかと思いました。実際に重過ぎるから、出来ません。私たちが仕様をした時、回路の重さを過小評価したらしい。回路の重さが分かりませんけど、目測で回路が最も重い成分なのに、仕様をした時、全部のコンポーネントの重さの合計に10%を加えてドローンの重さを予想してみました。</p>
+				<p>後で、電池にモーターを直接に接続しました。今度、モーターが最大容量で行いますけど、一台のモーター、他より遅く回ります。だから、ドローンは飛ぶのではなく、回ります。でも、殆ど飛ぶ事が出来るらしい。<br>
+然し、飛んでも、Arduinoがモーターを供給しませんから、私たちは速さを制御出来ません。</p>
+				<p>電池へモーターを直接に接続したら、動くドローンのヴィデオです。</p>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/HgmdSlyjn5w?rel=0" frameborder="0" allowfullscreen></iframe>
+				<h2>今からどうしますか？</h2>
+				<p>始めに、上述した二つの問題の原因を確定して、解決します。<br>
+もし、四台のモーターを同じ速さで最Arduinoから最大容量で（だから、速さを制御出来る）行いさせますと、次の試作品に考えます。</p>
+				<p>然し、プロジェクトの期限はたちまち近づきますから(1ヶ月以下)、多分他の試作品を組み立てるのが時間が足りません。でも、次のドローンの仕様に考える事が出来ます。</p>
+				<p>さらに、プロジェクトのプレゼンテーションもたちまち続きます(2週間以下)。今、私たちはドローンのデータから地形を描く事が出来るサーバーがあります。飛ばないドローンを代わる為に、クラスの<a href="http://pc.watch.impress.co.jp/docs/news/20120522_534410.html">ARDrone</a>を使う事が出来ます。このドローンは、自分で位置や、ドローンとしたにある物の間の長さを確定出来ます。もし、このデータを得る事が出来ますと、サーバーに送ってもいいです。<br>
+然し、クラスのARDroneは少し古くて擦り切れたから、安定をあまり出来ません。</p>
+				<p>後日、ARDroneのデータを得てみて、プレゼンテーションで飛ぶ事が出来るかをチェックします。</p>
+        	</div>
+        </div>
+    </body>
+</html>

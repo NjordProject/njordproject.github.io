@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Assemblage</h1>
+				<p>Il y a peu de temps nous vous annoncions que nous avions tous les composants pour monter le drone. Récemment nous avons tout assemblé. Cependant, les résultats attendus ne sont pas là. Cet article a pour but de vous présenter le résultat et de faire le point sur la situation.</p>
+				<h2>Situation</h2>
+				<p>Comme expliqué plus haut nous avons enfin assemblé tous les éléments. Nous avons donc pour cela soudé les composants au circuit électronique et collé les fixations moteurs avec de la colle composite.</p>
+				<p>Voici une photo du drone une fois assemblé :</p>
+				<img src="../../img/drone_photo.jpg" alt="photo drone" height="350px" width="600px">
+				<p>Après assemblage nous avons mis en place un simple code test afin de vérifier le bon fonctionnement de chaque moteur. Ensuite, nous avons essayé de les faire tourner à plein régime pour essayer de le faire décoller. Mais cela ne suffisait pas. Nous avons alors constaté un problème. Lorsqu'on envoie la valeur 255 aux moteurs (valeur maximum que l'Arduino peut fournir) les moteurs ne tournent pas au maximum de leur capacité. Nous ne sommes pas encore en mesure d'expliquer la raison de ce problème.<br>
+De plus, lorsque nous avons reçu le circuit, nous l'avons trouvé très lourd. Sincèrement, nous nous sommes demandé s'il pourrait voler. Et effectivement le drone est trop lourd et il n'arrive pas à décoller. Il semblerait que nous ayons sous-estimer le poids du circuit lors de nos calculs. Nous ne connaissons pas le poids de la plaque, mais à vue d'oeil elle semble être l'élément le plus lourd du drone, alors que dans notre devis, pour estimer le poids total, nous avions ajouté 10% à la somme du poids de tous les composants.</p>
+				<p>Dans un second temps nous avons relié les moteurs directement sur l'alimentation. Cette fois-ci les moteurs tournent bien au maximum de leur capacité, mais un moteur tourne moins vite que les trois autres. Donc le drone tourne sur lui-même au lieu de décoller. On sent qu'il ne lui manque pas grand-chose pour décoller.<br>
+Cependant, même si on arrivait à faire en sorte que les quatre moteurs tournent à plein régime, on ne pourrait pas contrôler leur vitesse (et donc on ne pourrait pas arrêter le drone) du fait que ce ne soit plus l'Arduino qui alimente les moteurs.</p>
+				<p>Voici une courte vidéo montrant le drone en mouvement lorsque les moteurs sont directement reliés à la batterie : </p>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/HgmdSlyjn5w?rel=0" frameborder="0" allowfullscreen></iframe>
+				<h2>Que faire à partir de maintenant ?</h2>
+				<p>Dans un premier temps nous allons essayer de déterminer la cause des deux problèmes cités plus haut et essayer de les résoudre.<br>
+Si nous sommes en mesure d'avoir bien les quatre moteurs qui tournent à la même vitesse et si on est capable de faire tourner les moteurs à plein régime depuis l'Arduino (et donc pouvoir réguler la vitesse) alors nous pourrions passer à un deuxième prototype.</p>
+				<p>Cependant, la date limite du projet approche à grands pas (environ un mois) et nous n'aurons sûrement pas le temps de construire ce deuxième prototype. Mais nous pouvons toutefois nous pencher sur l'élaboration d'un deuxième devis en prenant en compte les erreurs que nous avons déjà commises.</p>
+				<p>Avec la date limite du projet s'ajoute la soutenance (dans environ deux semaines) que nous devons passer pour présenter notre travail. Nous avons pour le moment un serveur qui peut établir la topographie d'une zone à partir des données que lui envoie une équipe de drone. Afin de remplacer notre drone qui ne vole pas nous pourrions nous servir de l'<a href="http://fr.wikipedia.org/wiki/Parrot_AR.Drone">ARDrone</a> mis à disposition pour notre classe. En effet, ce drone est capable de calculer sa position à partir de ses déplacements et mesurer la distance entre lui ce qu'il y a en dessous. Si nous trouvions le moyen de récupérer ces données, il nous faudrait juste les envoyer au serveur que nous avons mis en place.<br>
+Cependant, ce drone ayant beaucoup servi, il est plus ou moins abîmé et a du mal à se stabiliser.</p>
+				<p>Nous allons donc dans les jours qui suivent regarder comment récupérer les données calculées par l'ARDrone et vérifier qu'il est en assez bon état pour faire une démonstration lors de la présentation de notre projet.</p>
+        	</div>
+        </div>
+    </body>
+</html>
