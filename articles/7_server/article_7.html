@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <title>Njord Project - We build a drone from scratch</title>
+        <link rel="stylesheet" href="../../css/picnic.min.css">
+        <link rel="stylesheet" href="../../css/blog.css">
+    </head>
+    <body>
+        <div class="row">
+        	<div class="side full m-fourth">
+                <ul class="lang-list">
+                    <li><a href="../../index.html" class="button">ENG</a></li>
+                    <li><a href="../../index_fr.html" class="button">FR</a></li>
+                    <li><a href="../../index_jap.html" class="button">日本語</a></li>
+                </ul>
+        		<div class="header">
+        			<h1><a href="../../index.html">Njord Project</a></h1>
+        			<h2>Build an awesome drone from scratch</h2>
+        		</div>
+        	</div>
+        	<div class="content full m-three-fourth">
+    			<h1>Server</h1>
+				<p>Up to now, articles focused essentially on drone, but do not forget we have to implement a server. Today development of the server is almost completed. To get started with gyroscope was quite difficult, then we have in parallel developed the server.<br>
+By this article, we want to present how the server works and make a short demonstration by video.</p>
+				<h2>Principle</h2>
+				<p>As we have already explained in <a href="http://njordproject.github.io/articles/4_communication/article_4.html">radio communication</a>, server and drones communicate with a small radio transmitter/receiver. This communication is used to collect necessary information for area's topography, know drone status, or send some instructions to drones.<br>
+Each component is associated with an address. Then, each drone knows server's address and communicates with it using this address. However, server knows a set of addresses (each drone address). And, it can communicate with each agent individually.</p>
+				<p>The server is formed with three entities. A physical one (radio component), another which stores drone's information into a database and a last entity which reads database and draws associated topography.</p>
+				<img src="../../img/server_model.png" alt="server model" height="350px" width="600px">
+				<p>Then, we have three separated task which runs in parallel. If the server were formed with only one task, we probably miss some message due to a longer loop.</p>
+				<h3>NRF24L01</h3>
+				<p>The role of this task is just to read messages sent by drones and recopy them on serial port of the server. If the server wants to send an instruction to a drone, it can do it with this task. By default, radio transmitter/receiver is in reception mode. Then, server loop is just to read received messages. But if the task <i>Reader/Writter</i> writes on serial port, then the server will switch on transmitter mode for a short moment in order to send the instruction to the corresponding drone.</p>
+				<img src="../../img/server_scheme.png" alt="server scheme" height="500px" width="400px">
+				<h3>Reader/Writter</h3>
+				<p>The role of this task is to simply reads and writes on serial port. By default the server reads continually port's content and adds each message in database. If an instruction has to be sent to a drone, then the server will write it on serial port and <i>NRF24L01</i> will send the instruction.</p>
+				<h3>Topography</h3>
+				<p>Loop's principle of this task is to read the first record of database (which is similar to a queue). Afterwards, it adds this data in a matrix which represent the studied area. Because we do not know in advance the area's size this matrix is often resized. Then, matrix's content is drawn on the server's screen.<br>
+For example if a drone send [10, 12, 130]. It means that (10, 12) element of the matrix is 130. Therefore, matrix's indexes represent point coordinates and the value represent distance between drone and what is under. Then, the draw is a set of points of various colors. The colors are different depending on the value of matrix's components.</p>
+				<img src="../../img/topography_example.png" alt="topography example" height="550px" width="650px">
+				<h2>Implementation</h2>
+				<p>Here is the code of the first task:</p>
+				<p>
+					<pre><code class="c++">
+#include <SPI.h>
+#include <RH_NRF24.h>
+#include <communication.h>
+
+#define NB_DRONE 1
+
+Communication com(8, 10);
+bool ok;
+uint8_t msgDrone[11];
+uint8_t lenMsgDrone = sizeof(msgDrone);
+int i = 0;
+
+void setup() {
+	Serial.begin(9600);
+	ok = com.initRadio();
+	delay(1000);
+	if(!ok) {
+			Serial.println("Init error");
+	}
+}
+
+void loop() {
+	//For each drone write on serial port received message
+	for(i = 0; i < NB_DRONE; i++) {
+			ok = com.receiveMsg(msgDrone, lenMsgDrone, i + 1);
+			if(ok) {
+  				Serial.print("d:");
+  				Serial.print(msgDrone[0]);
+  				Serial.print(";x:");
+  				Serial.print(msgDrone[1]);
+  				Serial.print(";y:");
+  				Serial.print(msgDrone[2]);
+  				Serial.print(";z:");
+  				Serial.print(msgDrone[3]);
+  				Serial.print(";s1:");
+  				Serial.print(msgDrone[4]);
+  				Serial.print(";s2:");
+  				Serial.print(msgDrone[5]);
+  				Serial.print(";s3:");
+  				Serial.print(msgDrone[6]);
+  				Serial.print(";s4:");
+  				Serial.print(msgDrone[7]);
+  				Serial.print(";s5:");
+  				Serial.print(msgDrone[8]);
+  				Serial.print(";s6:");
+  				Serial.print(msgDrone[9]);
+  				Serial.print(";msg:");
+  				Serial.println(msgDrone[10]);
+			}
+	}
+	delay(400);
+}
+					</code></pre>
+				</p>
+				<p>Because this task acts on NRF24L01, it is developed with Arduino language. It reads messages from each known addresses and writes it on serial port.<br>
+You can notice that for the moment it cannot send instruction to a drone. It should be done afterward.
+</p>
+				<p>Now, lets take a look to the second task:</p>
+				<p>
+					<pre><code class="python">
+import serial
+import redis
+import sys
+
+r = redis.StrictRedis(host='localhost', port='6379', db=0)
+arduino = serial.Serial('/dev/ttyACM1', 9600)
+
+while True:
+		msg = arduino.readline()
+		msg = [int(m.split(':')[1]) for m in msg[:-2].split(';')]
+		print msg
+		r.lpush(sys.argv[1], msg)
+					</code></pre>
+				</p>
+				<p>We have chosen to use Python for simplicity reasons. Database is a <a href="http://fr.wikipedia.org/wiki/Redis">Redis</a> client. Those databases are really simple to use. And, we do not want to use complex requests as SQL offers. Then, Redis is the perfect tool.<br>
+As you can see, program simply reads serial port contents and recopy it in a Redis list. As the previous task, function for sending instruction has not been developed yet.</p>
+				<p>And to finish the implementation par, this is the last task:</p>
+				<p>
+					<pre><code class="python">
+#!usr/bin/python3.4
+#-*-coding:utf-8-*
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import cm
+import redis
+import sys
+
+name_area = sys.argv[1]
+r = redis.StrictRedis(host = "localhost", port = 6379, db = 0)
+
+data = np.zeros([0, 0])
+
+fig, ax = plt.subplots()
+cax = ax.imshow(data, cmap = cm.hot_r, origin = "lower")
+ax.set_title(name_area + "'s topography")
+cbar = fig.colorbar(cax, ticks = [0, 100, 200])
+cbar.ax.set_yticklabels(["< 0", "100", "> 200"])
+ax.patch.set_facecolor('white')
+plt.show(block = False)
+
+#Read from redis list and add to plot each new value available
+while True:
+	e = r.blpop(name_area)[1][1:-1].replace(' ', '').split(',')
+	e = [int(i) for i in e]
+	if(e[1] > data.shape[0]): #We need to resize the matrix
+		tmp = np.zeros([e[1], data.shape[1]])
+		tmp[0:data.shape[0], 0:data.shape[1]] = data
+		data = tmp
+	if(e[2] > data.shape[1]):
+		tmp = np.zeros([data.shape[0], e[2]])
+		tmp[0:data.shape[0], 0:data.shape[1]] = data
+		data = tmp
+	if e[3] - e[9] < 0: #If distance > 5m
+		data[e[1] - 1, e[2] - 1] = 0
+	else:
+		data[e[1] - 1, e[2] - 1] = e[3] - e[9]
+	cax = ax.imshow(data, cmap = cm.hot_r, origin = "lower", interpolation = "nearest")
+	plt.draw()
+					</code></pre>
+				</p>
+				<p>This program connects on the same Redis client as the previous task, in order to read what it has been inserted in. The part upper to the loop concern plot and matrix initialisation. At the beginning the matrix is a zero-matrix of null size. Into the loop, this task reads the content of the Redis queue and adds each entry in the matrix (resizes it if necessary) and draws the matrix's content in the plot.<br>
+The former condition is necessary for a simple reason. The maximum distance measured by our ultrasonic sensors is up to five meters. Beyond this value, sensor return infinite value. In this case, the distance between drone and what it is under will be negative. Then, we have to fix this value to 0 in order to keep consistency in our plot.<br>
+Regarding the plot, we chose to use <a href="http://matplotlib.org/">MatPlotLib</a> library because it is simply to use and widespread among the Python community.</p>
+			<h2>Demonstration</h2>
+			<p>To get finish with this article, this a short video showing real-time running of our server. But please note that we are still unable to locate our drone in space, then we sent non-real position to the server.</p>
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/m1uTxEl2V0Q?rel=0" frameborder="0" allowfullscreen></iframe>
+        	</div>
+        </div>
+    </body>
+</html>
